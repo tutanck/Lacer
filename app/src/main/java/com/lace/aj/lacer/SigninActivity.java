@@ -1,11 +1,8 @@
 package com.lace.aj.lacer;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,20 +10,24 @@ import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import com.android.volley.RequestQueue;
 import com.lace.aj.lacer.utils.TextWatchers;
+import com.lace.aj.lacer.utils.Utils;
 
 public class SigninActivity extends AppCompatActivity {
 
     private Context meGod = this;
     private RequestQueue mQueue;
 
-
     // UI references.
+    private View rootLayout;
+    private TextView mTitleTV;
     private AutoCompleteTextView mEmailInput;
     private EditText mPasswordInput;
+    private Button mSignInButton;
     private View mProgressView;
     private View mLoginFormLayout;
 
@@ -36,35 +37,38 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        mQueue = ((App)getApplication()).appQueue;
+        mQueue = ((App) getApplication()).appQueue;
 
+        rootLayout = findViewById(R.id.rootLayout);
+        mTitleTV = (TextView) findViewById(R.id.signin_form_title);
         mEmailInput = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordInput = (EditText) findViewById(R.id.password);
-        Button mSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mLoginFormLayout = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+
+        mTitleTV.setText(getString(R.string.signin_title));
 
         mEmailInput.addTextChangedListener(
-                TextWatchers.birthEmailWatcher(meGod,mSignInButton));
+                TextWatchers.birthEmailWatcher(meGod, mSignInButton));
 
         mPasswordInput.addTextChangedListener(
-                TextWatchers.birthPasswordWatcher(meGod,mSignInButton));
+                TextWatchers.birthPasswordWatcher(meGod, mSignInButton));
 
+        mSignInButton.setText(getString(R.string.signin_form_submit_text));
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
-
-        mLoginFormLayout = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
+     * errors are presented and no actual login attempt is made. */
     private void attemptLogin() {
 
         // Reset errors.
@@ -77,6 +81,8 @@ public class SigninActivity extends AppCompatActivity {
 
         boolean cancel = false;
         View focusView = null;
+
+
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -96,6 +102,10 @@ public class SigninActivity extends AppCompatActivity {
             cancel = true;
         }
 
+
+
+
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -104,7 +114,7 @@ public class SigninActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            //shout request
+            //shout request todo
         }
     }
 
@@ -121,39 +131,20 @@ public class SigninActivity extends AppCompatActivity {
 
 
     /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+     * Shows the progress UI and hides the login form. */
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        TypedArray array = getTheme().obtainStyledAttributes(new int[]{
+                android.R.attr.colorBackground, android.R.attr.textColorPrimary
+        });
 
-            mLoginFormLayout.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormLayout.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormLayout.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginFormLayout.setVisibility(show ? View.GONE : View.VISIBLE);
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormLayout.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        //https://stackoverflow.com/questions/3656586/android-how-to-get-background-color-of-activity-in-java
+        if (show)
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        else
+            rootLayout.setBackgroundColor(Utils.getThemeInitialBackgroundColor(meGod));
     }
 
 }
