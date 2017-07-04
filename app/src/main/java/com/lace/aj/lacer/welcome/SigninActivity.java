@@ -1,4 +1,4 @@
-package com.lace.aj.lacer;
+package com.lace.aj.lacer.welcome;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,8 +14,7 @@ import android.widget.TextView;
 
 
 import com.android.volley.RequestQueue;
-import com.lace.aj.lacer.utils.TextWatchers;
-import com.lace.aj.lacer.utils.Utils;
+import com.lace.aj.lacer.R;
 
 public class SigninActivity extends AppCompatActivity {
 
@@ -37,7 +36,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        mQueue = ((App) getApplication()).appQueue;
+       /* mQueue = ((App) getApplication()).appQueue;
 
         rootLayout = findViewById(R.id.rootLayout);
         mTitleTV = (TextView) findViewById(R.id.signin_form_title);
@@ -62,6 +61,7 @@ public class SigninActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+   */
     }
 
 
@@ -133,7 +133,7 @@ public class SigninActivity extends AppCompatActivity {
     /**
      * Shows the progress UI and hides the login form. */
     private void showProgress(final boolean show) {
-        TypedArray array = getTheme().obtainStyledAttributes(new int[]{
+        /*TypedArray array = getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.colorBackground, android.R.attr.textColorPrimary
         });
 
@@ -145,6 +145,7 @@ public class SigninActivity extends AppCompatActivity {
             rootLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         else
             rootLayout.setBackgroundColor(Utils.getThemeInitialBackgroundColor(meGod));
+   */
     }
 
 }
