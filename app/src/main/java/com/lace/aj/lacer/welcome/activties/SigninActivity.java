@@ -1,4 +1,4 @@
-package com.lace.aj.lacer.welcome;
+package com.lace.aj.lacer.welcome.activties;
 
 import android.content.Context;
 import android.content.res.TypedArray;

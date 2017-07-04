@@ -1,4 +1,4 @@
-package com.lace.aj.lacer.welcome;
+package com.lace.aj.lacer.welcome.activties;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
